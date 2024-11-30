@@ -1,3 +1,10 @@
+<?php
+include "./db.php";
+$workshops = $db->query("SELECT * FROM workshop");
+// echo '<pre>';
+// print_r($workshops->fetchAll());
+// echo '</pre>';
+?>
 <!doctype html>
 <html lang="fa" dir="rtl">
     <head>
@@ -10,27 +17,68 @@
         <script>
         // show modal
             $(document).ready(function(){
-                $("#btnShow").click(function(){
+                $(".btnShow").on('click',function(){
+                    var workshopId = $(this).data('id');
                     $.get("ajaxAdminPanel.php", function(data, status){
                         const workshops= JSON.parse(data);
-                        // $("demo").text(workshops);
-                        alert("data: "+workshops+"\nstatus:"+status);
-                        // $("#modalShow").innerHTML(
-                        //     <h5 class="card-title fw-bold">title</h5></div>
-                        //     <p class="card-text text-secondary text-justify pt-3">لورم ایپسوم یک متن ساختگی است</p>
-                        //     <div>
-                        //         <span class="badge text-bg-secondary">وضعیت</span>
-                        //     </div>
-                        // );
+                        for (let i = 0; i < workshops.length; i++) {
+                            const workshop = workshops[i];
+                            if(workshop.id == workshopId){
+                                $("#MShow").empty("");
+                                $("#MShow").prepend(
+                                    "<div class= \"d-flex justify-content-between\" ><h5 class=\"card-title fw-bold\">"+workshop.title+"</h5></div>"+
+                                    "<p class=\"card-text text-secondary text-justify pt-3\">"+workshop.body+"</p>"
+                                    // "<div><span class=\"badge text-bg-secondary\">"+workshop.status+"</span></div>"  
+                                );
+                            }
+                        }
                     });
                 });
+                // $(".btnShow").click(function(){
+                //     $.get("ajaxAdminPanel.php", function(data, status){
+                //         const workshops= JSON.parse(data);
+                //         for (let i = 0; i < workshops.length; i++) {
+                //             const workshop = workshops[i];
+                //             // console.log(workshop.status);
+                //             $("#MShow").prepend(
+                //                 "<div class= \"d-flex justify-content-between\" ><h5 class=\"card-title fw-bold\">"+workshop.title+"</h5></div>"+
+                //                 "<p class=\"card-text text-secondary text-justify pt-3\">"+workshop.body+"</p>"
+                //                 // "<div><span class=\"badge text-bg-secondary\">"+workshop.status+"</span></div>"  
+                //             );
+                //         }
+
+                //         //START MODAL SHOW
+                //         // <div class="d-flex justify-content-between">
+                //         //     <h5 class="card-title fw-bold">
+                //         //         title
+                //         //     </h5>
+                //         // </div>
+                //         // <p class="card-text text-secondary text-justify pt-3">لورم ایپسوم یک متن ساختگی است</p>
+                //         // <div>
+                //         //     <span class="badge text-bg-secondary">وضعیت</span>
+                //         // </div>
+                //         //ENDED MODAL SHOW
+
+                //         // console.log(workshops);
+                //         // $("demo").text(workshops);
+                //         // alert("data: "+workshops+"\nstatus:"+status);
+                //         // $("#modalShow").innerHTML(
+                //         //     <h5 class="card-title fw-bold">title</h5></div>
+                //         //     <p class="card-text text-secondary text-justify pt-3">لورم ایپسوم یک متن ساختگی است</p>
+                //         //     <div>
+                //         //         <span class="badge text-bg-secondary">وضعیت</span>
+                //         //     </div>
+                //         // );
+                //     });
+                // });
             });
+
         //end show modal
         </script>
     </head>
     <body>
-            <p id="demo">this</p>
-            <div class="container-fluid">
+            <!-- <div id="demo"></div> -->
+        <div class="container-fluid">
             <div class="row">
                 <main class="col-12 ms-sm-auto  ">
                     <div class="d-flex shadow-sm justify-content-between flex-wrap flex-md-nowrap  align-items-center pt-4 pb-3 px-3 mb-3 border-bottom">
@@ -56,53 +104,30 @@
                                 </thead>
                                 <tbody>
                                     <!-- ....... -->
-                                    <tr>
-                                        <th>1</th>
-                                        <td>لورم</td>
-                                        <td>لورم ایپسوم یک متن ساختگی است.</td>
-                                        <td>published</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-outline-dark">حذف</a>
-                                            <a href="#" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit&createModal">
-                                                ویرایش
-                                            </a>
-                                            <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#viewModal" id="btnShow">
-                                                مشاهده
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <!-- ....... -->
-                                    <tr>
-                                        <th>1</th>
-                                        <td>لورم</td>
-                                        <td>لورم ایپسوم یک متن ساختگی است.</td>
-                                        <td>published</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-outline-dark">حذف</a>
-                                            <a href="#" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit&createModal">
-                                                ویرایش
-                                            </a>
-                                            <a href="#" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#viewModal">
-                                                مشاهده
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <!-- ....... -->
-                                    <tr>
-                                        <th>1</th>
-                                        <td>لورم</td>
-                                        <td>لورم ایپسوم یک متن ساختگی است.</td>
-                                        <td>published</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-outline-dark">حذف</a>
-                                            <a href="#" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit&createModal">
-                                                ویرایش
-                                            </a>
-                                            <a href="#" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#viewModal">
-                                                مشاهده
-                                            </a>
-                                        </td>
-                                    </tr>
+                                     <?php if($workshops->rowCount()>0):?>
+                                        <?php foreach($workshops as $workshop):?>
+                                        <tr>
+                                            <th><?=$workshop['id']?></th>
+                                            <td><?=$workshop['title']?></td>
+                                            <td><?=substr($workshop['body'],0,100)?></td>
+                                            <td class="<?=($workshop['status']== 0)?'text-warning':'text-success'?>"><?=($workshop['status']== 0)?'draft':'puplished'?></td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-dark">حذف</a>
+                                                <a href="#" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#edit&createModal">
+                                                    ویرایش
+                                                </a>
+                                                <button class="btn btn-sm btn-outline-dark btnShow" data-id="<?=$workshop['id']?>" data-bs-toggle="modal" data-bs-target="#viewModal">
+                                                    مشاهده
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach?>
+                                    <?php else: ?>
+                                        <div class="col">
+                                            <div class="alert alert-danger">کارگاهی یافت نشد ...</div>
+                                        </div>
+                                    <?php endif?>
+                                
                                     <!-- ....... -->
                                 </tbody>
                             </table>
@@ -142,9 +167,8 @@
                         </div>
                     </div>
                     <!-- Modal edit and create ended -->
-                    <!-- Modal show-->
-                    <!-- viewModal -->
-                    <div class="modal fade" id="" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <!-- Modal show-->     
+                    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -156,21 +180,21 @@
                                         <div class="row justify-content-center">
                                             <div class="col">
                                                 <div class="card">
-                                                    <div class="card-body" id="modalView">
-                                                        <div class="d-flex justify-content-between" id="modalShow">
-                                                            <!-- add to script-->
-                                                            <button type="submit" class="btn btn-dark" name="submit">مشاهده ثبت نامی ها</button>
-                                                        </div>
+                                                    <div class="card-body" id="MShow">
+                                                        <!-- added to script -->
+                                                        <!-- <button type="submit" class="btn btn-dark" name="submit">
+                                                            مشاهده ثبت نامی ها
+                                                        </button> -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!--<div class="modal-footer">
+                                <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>-->
+                                    <button type="button" class="btn btn-primary">مشاهده ثبت نامی ها</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -179,7 +203,7 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <button>Send an HTTP GET request to a page and get the result back</button>
+    <!-- <button>Send an HTTP GET request to a page and get the result back</button> -->
     </body>
 </html>
 

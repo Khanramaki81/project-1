@@ -1,3 +1,7 @@
+<?php
+include "./db.php";
+$workshops = $db->query("SELECT * FROM workshop");
+?>
 <!doctype html>
 <html lang="fa" dir="rtl">
     <head>
@@ -19,61 +23,31 @@
                             <div class="col-lg-12">
                                 <div class="row g-3">
                                     <!-- .......... -->
-                                    <div class="col-sm-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <h5 class="card-title fw-bold">کارگاه یک</h5>
+                                    <?php if($workshops->rowCount()>0):?>
+                                        <?php foreach($workshops as $workshop):?>
+                                            <?php if($workshop['status']==1):?>
+                                                <div class="col-sm-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="d-flex justify-content-between">
+                                                                <h5 class="card-title fw-bold"><?=$workshop['title']?></h5>
+                                                            </div>
+                                                            <p class="card-text text-secondary pt-3"><?= substr($workshop['body'],0,1000)?></p>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <a href="" class="btn btn-sm btn-dark">مشاهده</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <p class="card-text text-secondary pt-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="" class="btn btn-sm btn-dark">مشاهده</a>
-                                                </div>
+                                            <?php endif?>
+                                        <?php endforeach?>
+                                    <?php else:?>
+                                        <div class="col">
+                                            <div class="alert alert-danger">
+                                                کارگاهی یافت نشد ...
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- .......... -->
-                                    <div class="col-sm-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <h5 class="card-title fw-bold">کارگاه یک</h5>
-                                                </div>
-                                                <p class="card-text text-secondary pt-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="" class="btn btn-sm btn-dark">مشاهده</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- .......... -->
-                                    <div class="col-sm-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <h5 class="card-title fw-bold">کارگاه یک</h5>
-                                                </div>
-                                                <p class="card-text text-secondary pt-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="" class="btn btn-sm btn-dark">مشاهده</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- .......... -->
-                                    <div class="col-sm-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <h5 class="card-title fw-bold">کارگاه یک</h5>
-                                                </div>
-                                                <p class="card-text text-secondary pt-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="" class="btn btn-sm btn-dark">مشاهده</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php endif?>
                                     <!-- .......... -->
                                 </div>
                             </div>
@@ -82,11 +56,10 @@
                 </main>
             <!-- Footer Section -->
             <?php include "./include/footer.php"?>
-
             </div>
         </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
 </html>
 
 
