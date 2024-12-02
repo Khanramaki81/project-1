@@ -14,67 +14,6 @@ $workshops = $db->query("SELECT * FROM workshop");
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
         <link rel="stylesheet" href="assets/css/style.css" />
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <script>
-        // show modal
-            $(document).ready(function(){
-                $(".btnShow").on('click',function(){
-                    var workshopId = $(this).data('id');
-                    $.get("ajaxAdminPanel.php", function(data, status){
-                        const workshops= JSON.parse(data);
-                        for (let i = 0; i < workshops.length; i++) {
-                            const workshop = workshops[i];
-                            if(workshop.id == workshopId){
-                                $("#MShow").empty("");
-                                $("#MShow").prepend(
-                                    "<div class= \"d-flex justify-content-between\" ><h5 class=\"card-title fw-bold\">"+workshop.title+"</h5></div>"+
-                                    "<p class=\"card-text text-secondary text-justify pt-3\">"+workshop.body+"</p>"
-                                    // "<div><span class=\"badge text-bg-secondary\">"+workshop.status+"</span></div>"  
-                                );
-                            }
-                        }
-                    });
-                });
-                // $(".btnShow").click(function(){
-                //     $.get("ajaxAdminPanel.php", function(data, status){
-                //         const workshops= JSON.parse(data);
-                //         for (let i = 0; i < workshops.length; i++) {
-                //             const workshop = workshops[i];
-                //             // console.log(workshop.status);
-                //             $("#MShow").prepend(
-                //                 "<div class= \"d-flex justify-content-between\" ><h5 class=\"card-title fw-bold\">"+workshop.title+"</h5></div>"+
-                //                 "<p class=\"card-text text-secondary text-justify pt-3\">"+workshop.body+"</p>"
-                //                 // "<div><span class=\"badge text-bg-secondary\">"+workshop.status+"</span></div>"  
-                //             );
-                //         }
-
-                //         //START MODAL SHOW
-                //         // <div class="d-flex justify-content-between">
-                //         //     <h5 class="card-title fw-bold">
-                //         //         title
-                //         //     </h5>
-                //         // </div>
-                //         // <p class="card-text text-secondary text-justify pt-3">لورم ایپسوم یک متن ساختگی است</p>
-                //         // <div>
-                //         //     <span class="badge text-bg-secondary">وضعیت</span>
-                //         // </div>
-                //         //ENDED MODAL SHOW
-
-                //         // console.log(workshops);
-                //         // $("demo").text(workshops);
-                //         // alert("data: "+workshops+"\nstatus:"+status);
-                //         // $("#modalShow").innerHTML(
-                //         //     <h5 class="card-title fw-bold">title</h5></div>
-                //         //     <p class="card-text text-secondary text-justify pt-3">لورم ایپسوم یک متن ساختگی است</p>
-                //         //     <div>
-                //         //         <span class="badge text-bg-secondary">وضعیت</span>
-                //         //     </div>
-                //         // );
-                //     });
-                // });
-            });
-
-        //end show modal
-        </script>
     </head>
     <body>
             <!-- <div id="demo"></div> -->
@@ -203,7 +142,22 @@ $workshops = $db->query("SELECT * FROM workshop");
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- <button>Send an HTTP GET request to a page and get the result back</button> -->
+        <script>
+        // show modal
+            $(document).ready(function(){
+                $(".btnShow").on('click',function(){
+                    var workshopId = $(this).data('id');
+                    $.get("ajaxAdminPanel.php?funcModal=funcShow&id="+workshopId, function(data, status){
+                        const workshop= JSON.parse(data);
+                        // console.log(workshop[0]);
+                        $("#MShow").append(workshop[0]+"<br>"+workshop[1]);
+                    });
+                });
+            });
+
+        //end show modal
+        </script>
+        <!-- <button>Send an HTTP GET request to a page and get the result back</button> -->
     </body>
 </html>
 
