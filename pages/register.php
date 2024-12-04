@@ -35,16 +35,23 @@ include "../db.php";
                             }else{
                                 $email = $_POST['email'];
                                 $password = $_POST['password'];
-                                $access_type = $_POST['access_type'];
-                                $userInsert = $db->prepare("INSERT INTO users (email,password,access_type) VALUES (:email, :password, :access_type)");
-                                $userInsert->execute(['email' => $email, 'password'=>$password, 'access_type'=>$access_type]);
-                            
-                                if($_POST['access_type']==2){
-                                    header("LOCATION:../index.php");
-                                }else{
-                                    header("LOCATION:../admin_panel.php");
-                                }
-                                exit();
+                                $role = $_POST['role'];
+                                $userInsert = $db->prepare("INSERT INTO users (email,password,role) VALUES (:email, :password, :role)");
+                                $userInsert->execute(['email' => $email, 'password'=>$password, 'role'=>$role]);
+                                $user_Select = $db->query("SELECT * FROM users WHERE email='$email' AND password='$password'");
+                                foreach($user_Select as $user_s):
+                                    if($user_s['role']=="admin"){
+                                        header("LOCATION:../admin_panel.php");
+                                    }else{
+                                        header("LOCATION:../index.php?user_id=".$user_s['id']);
+                                    }
+                                endforeach;
+                                // if($_POST['role']=="admin"){
+                                //     header("LOCATION:../admin_panel.php");
+                                // }else{
+                                //     header("LOCATION:../index.php?");
+                                // }
+                                // exit();
                             }
                         }
                         ?>
@@ -66,9 +73,9 @@ include "../db.php";
                                 <div class="form-text text-danger"><?=$invalidInputRePassIncorrect?></div>
                             </div>
                             <div class="my-5 mx-5">
-                                <select class="form-select form-select-lg "  aria-label=".form-select-lg example " name="access_type">
-                                    <option  value="1">مدیر</option>
-                                    <option  value="2">کاربر</option>
+                                <select class="form-select form-select-lg "  aria-label=".form-select-lg example " name="role">
+                                    <option  value="admin">مدیر</option>
+                                    <option  value="user">کاربر</option>
                                 </select>
                             </div>
                             <div class="mx-5 ">
