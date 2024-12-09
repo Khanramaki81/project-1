@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 04, 2024 at 09:38 PM
+-- Generation Time: Dec 09, 2024 at 09:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `projectone`
+-- Database: `project-1`
 --
 
 -- --------------------------------------------------------
@@ -38,7 +38,9 @@ CREATE TABLE `subscribers` (
 --
 
 INSERT INTO `subscribers` (`id`, `user_id`, `workshop_id`) VALUES
-(1, 12, 2);
+(1, 2, 7),
+(2, 2, 5),
+(3, 3, 7);
 
 -- --------------------------------------------------------
 
@@ -58,16 +60,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `role`) VALUES
-(1, 'ali@gmail.com', '1234', 'user'),
-(3, 'reza@gmail.com', '12345', 'user'),
-(5, 'yas@gmail.com', '12345', 'user'),
-(6, 'syas@gmail.com', '1', 'user'),
-(7, 'syas@gmail.com', '1', 'user'),
-(8, 'syas@gmail.com', '1', 'user'),
-(9, 'syas@gmail.com', '1', 'user'),
-(10, 'syas@gmail.com', '1', 'user'),
-(11, 'syas@gmail.com', '1', 'user'),
-(12, 'mohamad@gmail.com', '12345', 'user');
+(1, 'ali@gmail.com', 'YTEyMw==', 'admin'),
+(2, 'reza@gmail.com', 'MTIz', 'user'),
+(3, 'mahor@gmail.com', 'MTIz', 'user');
 
 -- --------------------------------------------------------
 
@@ -87,8 +82,13 @@ CREATE TABLE `workshops` (
 --
 
 INSERT INTO `workshops` (`id`, `title`, `body`, `status`) VALUES
-(1, 'کارگاه ۱', 'این اولین کارگاه است.', 'draft'),
-(2, 'کارگاه ۲', 'این دومین کارگاه است.', 'published');
+(1, 'کارگاه ۱', 'این توضیحات مربوط به کارگاه ۱ است.', 'published'),
+(2, 'کارگاه ۲', 'این توضیحات مربوط به کارگاه ۲ است.', 'published'),
+(3, 'کارگاه ۳', 'این توضیحات مربوط به کارگاه ۳ است.', 'published'),
+(4, 'کارگاه ۴', 'این توضیحات مربوط به کارگاه ۴ است.', 'draft'),
+(5, 'کارگاه ۵', 'این توضیحات مربوط به کارگاه ۵ است.', 'published'),
+(6, 'کارگاه 6', 'این توضیحات مربوط به کارگاه 6 است.', 'published'),
+(7, 'کارگاه 7', 'این توضیحات مربوط به کارگاه 7 است.', 'published');
 
 --
 -- Indexes for dumped tables
@@ -106,7 +106,8 @@ ALTER TABLE `subscribers`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`,`email`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `workshops`
@@ -122,19 +123,19 @@ ALTER TABLE `workshops`
 -- AUTO_INCREMENT for table `subscribers`
 --
 ALTER TABLE `subscribers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `workshops`
 --
 ALTER TABLE `workshops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

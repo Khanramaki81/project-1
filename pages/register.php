@@ -1,5 +1,6 @@
 <?php
 include "../db.php";
+session_start();
 ?>
 <!doctype html>
 <html lang="fa" dir="rtl">
@@ -23,43 +24,52 @@ include "../db.php";
                         $invalidInputPassword= '';
                         $invalidInputRePass= '';
                         $invalidInputRePassIncorrect= '';
+                        $invalidStructureInputEmail='';
+                        $err_msg="";
+                        $Mail = "/[a-z0-9]+\@+[a-z]+\.+[a-z]/";
                         if(isset($_POST['submit'])){
                             if(empty(trim($_POST['email']))){
                                 $invalidInputEmail = 'فیلد ایمیل الزامی است.';
+                            }elseif(preg_match($Mail,$_POST['email'])==false){
+                                $invalidStructureInputEmail = 'ایمیل را درست وارد کنید.';
                             }elseif(empty(trim($_POST['password']))){
                                 $invalidInputPassword = 'فیلد رمز عبور الزامی است.';
                             }elseif(empty(trim($_POST['password']))){
                                 $invalidInputRePass = 'فیلد تکرار رمز عبور الزامی است.';
                             }elseif($_POST['repass']!=$_POST['password']){
                                 $invalidInputRePassIncorrect = 'تکرار رمز عبور نادرست است.';
-                            }else{
+                            }elseif(!empty(trim($_POST['email'])) && !empty(trim($_POST['password']))){
                                 $email = $_POST['email'];
                                 $password = $_POST['password'];
+                                $encrypted= base64_encode($password);
                                 $role = $_POST['role'];
-                                $userInsert = $db->prepare("INSERT INTO users (email,password,role) VALUES (:email, :password, :role)");
-                                $userInsert->execute(['email' => $email, 'password'=>$password, 'role'=>$role]);
-                                $user_Select = $db->query("SELECT * FROM users WHERE email='$email' AND password='$password'");
-                                foreach($user_Select as $user_s):
-                                    if($user_s['role']=="admin"){
-                                        header("LOCATION:../admin_panel.php");
-                                    }else{
-                                        header("LOCATION:../index.php?user_id=".$user_s['id']);
-                                    }
-                                endforeach;
-                                // if($_POST['role']=="admin"){
-                                //     header("LOCATION:../admin_panel.php");
-                                // }else{
-                                //     header("LOCATION:../index.php?");
-                                // }
-                                // exit();
+                                $user_Select = $db->query("SELECT * FROM users WHERE email='$email'");
+                                if($user_Select->rowCount()>0){
+                                    $err_msg="ایمیل تکراری است.";
+                                }else{
+                                    $userInsert = $db->prepare("INSERT INTO users (email,password,role) VALUES (:email, :password, :role)");
+                                    $userInsert->execute(['email' => $email, 'password'=>$encrypted, 'role'=>$role]);
+                                    $user_Select = $db->query("SELECT * FROM users WHERE email='$email' AND password='$encrypted'");
+                                    foreach($user_Select as $user_s):
+                                        if($user_s['role']=="admin"){
+                                            $_SESSION['email'] = $email;
+                                            header("LOCATION:../admin_panel.php");
+                                        }else{
+                                            $_SESSION['id'] = $user_s['id'];
+                                            header("LOCATION:../index.php?user_id=".$user_s['id']);
+                                        }
+                                    endforeach;
+                                }
                             }
                         }
                         ?>
+                        <div class="form-text text-danger fw-bold fs-5 text-center"><?=$err_msg?></div>
                         <form action="" method="POST" >
                             <div class="mx-5 my-3">
                                 <label class="form-label ">ایمیل</label>
                                 <input  class="p-2 form-control form-control-lg" type="text" name="email">
                                 <div class="form-text text-danger"><?=$invalidInputEmail?></div>
+                                <div class="form-text text-danger"><?=$invalidStructureInputEmail?></div>
                             </div>
                             <div class="mx-5 my-3">
                                 <label class="form-label">رمز عبور</label>

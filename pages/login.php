@@ -1,33 +1,51 @@
 <?php
+session_start();
 include "../db.php";
 $invalidInputEmail = '';
 $invalidInputPassword = '';
-    if(isset($_POST['submit'])){
-        if(empty(trim($_POST['email']))){
-            $invalidInputEmail = 'فیلد ایمیل الزامی است.';
-        }elseif(empty(trim($_POST['password']))){
-            $invalidInputPassword = 'فیلد رمز عبور الزامی است.';
-        }
-
-        if(!empty(trim($_POST['email'])) && !empty(trim($_POST['password']))){
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $user = $db->prepare("SELECT * FROM  users WHERE email=:email AND password=:password ");
-            $user->execute(['email' => $email, 'password'=>$password]);
-            if($user->rowCount()==1){
-                $user_Select = $db->query("SELECT * FROM users WHERE email='$email' AND password='$password'");
-                foreach($user_Select as $user_s):
-                    if($user_s['access_type']==1){
+$invalidStructureInputEmail='';
+$err_msg='';
+$Mail = "/[a-z0-9]+\@+[a-z]+\.+[a-z]/";
+if(isset($_POST['submit'])){
+    if(empty(trim($_POST['email']))){
+        $invalidInputEmail = 'فیلد ایمیل الزامی است.';
+    }elseif(preg_match($Mail,$_POST['email'])==false){
+        $invalidStructureInputEmail = 'ایمیل را درست وارد کنید.';
+    }elseif(empty(trim($_POST['password']))){
+        $invalidInputPassword = 'فیلد رمز عبور الزامی است.';
+    }
+    if(!empty(trim($_POST['email'])) && !empty(trim($_POST['password']))){
+        $email = $_POST['email'];
+        // echo $email;
+        $password = $_POST['password'];
+        $encrypted= base64_encode($password);
+        // $user = $db->query("SELECT * FROM  users WHERE email=$email AND password=:password ");
+        // $user->execute(['email' => $email, 'password'=>$password]);
+        $sql = "SELECT * FROM users";
+        $users =$db->query($sql) ;
+        // $users = $users->fetchALL();
+        if($users->rowCount()>0){
+            foreach($users as $user){
+                if(($user['email']==$email)&&($user['password']==$encrypted)){
+                    // echo $_SESSION['email'];
+                    if($user['role']=="admin"){
+                        $_SESSION['email'] = $email;
                         header("LOCATION:../admin_panel.php");
                     }else{
-                        header("LOCATION:../index.php");
+                        $_SESSION['id'] = $user['id'];
+                        header("LOCATION:../index.php?user_id=".$user['id']);
                     }
-                endforeach;
+                }else{
+                    $err_msg="کاربری با این مشخصات یافت نشد.";
+                }
             }
-            header("LOCATION:login.php?err_msg=کاربری با این مشخصات یافت نشد.");
-            exit();
+        }else{
+            $err_msg="کاربری با این مشخصات یافت نشد.";
         }
     }
+        
+    }
+
 ?>
 <!doctype html>
 <html lang="fa" dir="rtl">
@@ -46,16 +64,13 @@ $invalidInputPassword = '';
                         <h2 class="fw-bold fs-3  secondary-emphasis">ورود به حساب کاربری</h2>
                     </div>
                     <div>
+                        <div class="form-text text-danger fw-bold fs-5 text-center"><?=$err_msg?></div>
                         <form method = "POST">
-                            <?php if(isset($_GET['err_msg'])):?>
-                                <div class="alert alert-sm alert-danger">
-                                    <?=$_GET['err_msg']?>
-                                </div>
-                            <?php endif?>
                             <div class="mx-5 my-3">
                                 <label class="form-label">ایمیل</label>
                                 <input  class="p-2 form-control form-control-lg" type="text" name="email">
                                 <div class="form-text text-danger"><?=$invalidInputEmail?></div>
+                                <div class="form-text text-danger"><?=$invalidStructureInputEmail?></div>
                             </div>
                             <div class="mx-5 my-3">
                                 <label class="form-label">رمز عبور</label>

@@ -8,15 +8,18 @@ function funcShow($id){
     echo json_encode ($workshop, JSON_UNESCAPED_UNICODE);   
 }
 
-// function funcListShow($id){
-//     $sql = "SELECT * FROM subscribers WHERE workShop_id=$id";
-//     $subscribers =$GLOBALS['db']->query($sql);
-//     $subscribers = $subscribers->fetch(); 
-//     echo json_encode ($subscribers, JSON_UNESCAPED_UNICODE);   
-// }
-
+function funcListShow($id){
+    $sql = "SELECT users.email FROM users INNER JOIN subscribers ON users.id=subscribers.user_id WHERE subscribers.workshop_id=$id";
+    $userListEmail = $GLOBALS['db']->query($sql);
+    $userListEmail = $userListEmail->fetchAll(); 
+    // echo "<pre>";
+    // print_r($userListEmail->fetchAll());
+    // echo "</pre>";        
+    echo json_encode ($userListEmail, JSON_UNESCAPED_UNICODE);   
+}
+// funcListShow(5);
 function funcBeforeShow($id){
-    $sql = "SELECT * FROM workshops WHERE id=$id ";
+    $sql = "SELECT * FROM workshops WHERE id=$id";
     $workshop =$GLOBALS['db']->query($sql);
     $workshop = $workshop->fetch();
     echo json_encode ($workshop, JSON_UNESCAPED_UNICODE);   
@@ -44,10 +47,31 @@ function funcCreate(){
 
 function funcDelete(){
     $id = $_POST['id'];
-    $sql = "DELETE FROM workshops WHERE id = :id";
-    $workshop =$GLOBALS['db']->prepare($sql); 
-    $workshop->execute(['id'=>$id]);
-    echo json_encode("کارگاه با موفقیت حذف شد.");
+    $sql_1 = "SELECT * FROM subscribers WHERE workShop_id=$id";
+    $subscribers =$GLOBALS['db']->query($sql_1);
+    $subscribers = $subscribers->fetchAll();
+    if(!$subscribers==[]){
+        foreach($subscribers as $subscriber){
+            $subId = $subscriber['id'];
+            $sql = "DELETE FROM subscribers WHERE id = :id";
+            $subscriber =$GLOBALS['db']->prepare($sql); 
+            $subscriber->execute(['id'=>$subId]);
+        }
+        $sql = "DELETE FROM workshops WHERE id = :id";
+        $workshop =$GLOBALS['db']->prepare($sql); 
+        $workshop->execute(['id'=>$id]);
+        echo json_encode("کارگاه با موفقیت حذف شد.");
+    }
+    else{
+        $sql = "DELETE FROM workshops WHERE id = :id";
+        $workshop =$GLOBALS['db']->prepare($sql); 
+        $workshop->execute(['id'=>$id]);
+        echo json_encode("کارگاه با موفقیت حذف شد.");
+    }
+    // $sql = "DELETE FROM workshops WHERE id = :id";
+    // $workshop =$GLOBALS['db']->prepare($sql); 
+    // $workshop->execute(['id'=>$id]);
+    // echo json_encode("کارگاه با موفقیت حذف شد.");
 }
 
 function funcRegister(){
@@ -60,7 +84,7 @@ function funcRegister(){
 }
 // $id =$_GET['id'];
 // $func =$_GET['funcModal'];
-// $func();
+// funcListShow($id);
 
 $func =$_GET['funcAction'];
 if($func=="funcDelete"){
